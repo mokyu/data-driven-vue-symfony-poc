@@ -14,8 +14,7 @@ class Form implements \JsonSerializable
     public $path;
     public $placeholder;
     public $fieldType;
-    public $listFromEnum;
-    public $listFromSchema;
+    public $dataSource;
 
     public function jsonSerialize()
     {
@@ -25,8 +24,7 @@ class Form implements \JsonSerializable
             'placeholder' => $this->placeholder,
             'name' => $this->name,
             'path' => $this->path,
-            'listFromEnum' => $this->listFromEnum,
-            'listFromSchema' => $this->listFromSchema,
+            'dataSource' => $this->dataSource,
         ];
     }
 }

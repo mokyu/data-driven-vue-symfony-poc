@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\BookRepository;
+use App\Schema\BookSchema;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -138,6 +139,19 @@ class Book
     {
         $this->borrowed_by = $borrowed_by;
 
+        return $this;
+    }
+
+    public function setFromSchema(BookSchema $schema, ?Member $borrower): self
+    {
+        $this->borrowed_by = $schema->borrowed_by;
+        $this->genre = $schema->genre;
+        $this->author = $schema->author;
+        $this->description = $schema->description;
+        $this->isbn_number = $schema->isbn_number;
+        $this->title = $schema->title;
+        $this->published_at = new \DateTime($schema->published_at);
+        $this->setBorrowedBy($borrower);
         return $this;
     }
 }

@@ -38,7 +38,7 @@ class MemberSchema
      */
     public $name;
 
-    public static function MakeFromEntity(Member $entity): ?self
+    public static function MakeFromEntity(?Member $entity): ?self
     {
         if ($entity == null) {
             return null;

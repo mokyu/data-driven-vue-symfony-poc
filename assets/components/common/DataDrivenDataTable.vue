@@ -9,13 +9,6 @@
             hide-details
         />
         <v-btn
-            v-if="expandable"
-            class="mt-3 ml-4"
-            @click="items.forEach(item => item._expanded = true)"
-        >
-          Expand All
-        </v-btn>
-        <v-btn
             class="mt-3 ml-4"
             @click="$refs.form.openDialog(null)"
         >
@@ -33,11 +26,6 @@
         >
           <template v-slot:item="{ item }">
             <tr>
-              <td v-if="expandable">
-                <v-icon @click="item._expanded = !item._expanded">
-                  {{ item._expanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                </v-icon>
-              </td>
               <td v-for="(header, key) in classData.header" :key="key">
                 <data-driven-data-table-cell
                     :type="header.type" :value="item[header.path]"
@@ -68,13 +56,6 @@
                     indeterminate
                 />
               </td>
-            </tr>
-            <tr v-if="expandable && item._expanded">
-                <td :colspan="generatedHeaders.length" style="border: none !important; background-color: #FFF !important;" class="pa-4">
-                  <slot name="expanded_item" v-bind:item="item">
-                    content
-                  </slot>
-                </td>
             </tr>
           </template>
         </v-data-table>
@@ -118,11 +99,6 @@ name: "DataDrivenDataTable",
       type: String,
       default: 'Are you sure you want to delete this item?<br/>Once deleted it\'s gone forever.'
     },
-    expandable: {
-      required: false,
-      type: Boolean,
-      default: false
-    },
     forceNoCreate: {
       required: false,
       type: Boolean,
@@ -138,7 +114,6 @@ name: "DataDrivenDataTable",
   data() {
     return {
       search: '',
-      expanded: [],
       classData: null,
       items: [],
       lists: {},
@@ -173,22 +148,13 @@ name: "DataDrivenDataTable",
           )
         });
       }
-      if (this.expandable) {
-        data.unshift({
-          text: '',
-          value: '_expand',
-          width: '40px'
-        })
-      }
-      if (this.classData && this.classData.general && (this.classData.general.updatable || this.classData.general.deletable)) {
-        data.push(
-            {
-              text: '',
-              value: '_actions',
-              width: '80px'
-            }
-        )
-      }
+      data.push(
+          {
+            text: '',
+            value: '_actions',
+            width: '80px'
+          }
+      )
       return data;
     },
 
@@ -201,15 +167,9 @@ name: "DataDrivenDataTable",
 
   async mounted() {
     this.classData = (await axios.get(`/api/metadata/${this.schema}`)).data;
-    this.items = (await axios.get(`/api/data/${this.schema}/list`, this.config)).data;
-    if (this.expandable) {
-      this.items.forEach(item => {
-        this.$set(item, '_expanded', false);
-        this.$set(item, '_search', null);
-      })
-    }
+    this.items = (await axios.get(this.classData.common.list, this.config)).data;
     // scan for list based headers and retrieve the lists
-    for (const header of this.classData.header) {
+    for (const header of this.classData.table) {
       if (header.type === 'List' && !this.lists[header.listFromEnum || header.listFromSchema]) {
         if (header.listFromEnum) {
           this.$set(this.lists, header.listFromEnum, (await axios.get(`/api/enum/${header.listFromEnum}/list`)).data);
@@ -247,12 +207,6 @@ name: "DataDrivenDataTable",
     async reloadData() {
       this.isLoading = true;
       this.items = (await axios.get(`/api/data/${this.schema}/list`, this.config)).data;
-      if (this.expandable) {
-        this.items.forEach(item => {
-          this.$set(item, '_expanded', false);
-          this.$set(item, '_search', null);
-        })
-      }
       this.isLoading = false;
     },
 

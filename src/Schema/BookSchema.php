@@ -89,7 +89,7 @@ class BookSchema
      * @Table(
      *     name="Uitgebracht op",
      *     path="published_at",
-     *     fieldType="DateTimeField"
+     *     fieldType="DateField"
      * )
      * @Form(
      *     rules={"REQUIRED"},
@@ -113,7 +113,8 @@ class BookSchema
      *     name="Genre",
      *     fieldType="EnumField",
      *     placeholder="Genre van het boek",
-     *     path="published_at"
+     *     path="genre",
+     *     dataSource="/api/enum/GenreEnum"
      * )
      */
     public $genre;
@@ -125,26 +126,28 @@ class BookSchema
      *     fieldType="Memberfield"
      * )
      * @Form(
-     *     rules={"REQUIRED"},
+     *     rules={},
      *     name="Geleend door",
      *     fieldType="MemberField",
      *     placeholder="Geleend door",
-     *     path="borrowed_by"
+     *     path="borrowed_by",
+     *     dataSource="/api/members"
      * )
      */
     public $borrowed_by;
 
-    public static function MakeFromEntity(Book $entity): ?self
+    public static function MakeFromEntity(?Book $entity): ?self
     {
         if ($entity == null) {
             return null;
         }
         $s = new self();
+        $s->id = $entity->getId();
         $s->isbn_number = $entity->getIsbnNumber();
         $s->title = $entity->getTitle();
         $s->author = $entity->getAuthor();
         $s->description = $entity->getDescription();
-        $s->published_at = $entity->getPublishedAt();
+        $s->published_at = $entity->getPublishedAt()->format("Y-m-d");
         $s->genre = $entity->getGenre();
         $s->borrowed_by = MemberSchema::MakeFromEntity($entity->getBorrowedBy());
         return $s;
@@ -160,6 +163,7 @@ class BookSchema
         if (self::isValid($req)) {
 
             $s = new self();
+            $s->id = $req->get('id');
             $s->isbn_number = $req->get('isbn_number');
             $s->title = $req->get('title');
             $s->description = $req->get('description');
@@ -186,7 +190,6 @@ class BookSchema
             $req->get('genre') !== null &&
             \is_numeric($req->get('genre'))
         );
-
         if ($fields) {
             try {
                 if ($req->get('published_at') !== null) {
@@ -197,5 +200,6 @@ class BookSchema
                 return false;
             }
         }
+        return false;
     }
 }

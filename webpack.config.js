@@ -44,9 +44,29 @@ Encore
     })
 
     .addPlugin(new VuetifyLoaderPlugin())
-    .enableSassLoader(options => {
-        options.implementation = require('sass')
-        options.fiber = require('fibers')
+    // .enableSassLoader(options => {
+    //     options.implementation = require('sass')
+    //     options.sassOptions = {
+    //         fibers: require('fibers'),
+    //         indentedSyntax: true
+    //     }
+    // })
+    .addRule({
+        test: /\.s(c|a)ss$/,
+        use: [
+            'vue-style-loader',
+            'css-loader',
+            {
+                loader: 'sass-loader',
+                // Requires sass-loader@^8.0.0
+                options: {
+                    implementation: require('sass'),
+                    sassOptions: {
+                        indentedSyntax: true // optional
+                    },
+                },
+            },
+        ],
     })
 // enables Sass/SCSS support
 //.enableSassLoader()

@@ -6,7 +6,7 @@
     >
       <v-card v-if="schema && showDialog">
         <v-card-title>
-          {{ classData.general.title }}
+          {{ classData.common.title }}
           <v-spacer/>
           <v-icon
               @click="showDialog = false"
@@ -19,7 +19,7 @@
               <v-row v-for="(row, key) in classData.form" :key="key">
                 <v-col class="pt-9 text-right">
                 <span>
-                  <span v-if="row.required" class="asterisk">*</span> {{ row.name }}
+                  <span v-if="row.rules.includes('REQUIRED')" class="asterisk">*</span> {{ row.name }}
                 </span>
                 </v-col>
                 <v-col cols="8">
@@ -104,10 +104,12 @@ export default {
       if (this.$refs.form.validate()) {
         this.isSaving = true;
         try {
-          await axios.post(`/api/data/${this.schema}/save`, this.model, this.config);
+          console.log(this.model);
+          await axios.post(this.classData.common.post, this.model, this.config);
           this.$emit('saved');
           this.$emit('success');
         } catch(e) {
+          console.log(e);
           this.$emit('failed');
         }
         this.isSaving = false;
