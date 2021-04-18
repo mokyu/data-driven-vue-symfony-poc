@@ -47,7 +47,10 @@ class BookController extends AbstractController
         if ($schema && $schema->id === null) {
             /** @var MemberRepository $mrep */
             $mrep = $em->getRepository(Member::class);
-            $borrower = $mrep->findOneBy(array('id' => $schema->id));
+            $borrower = null;
+            if ($schema->borrowed_by) {
+                $borrower = $mrep->findOneBy(array('id' => $schema->borrowed_by));
+            }
             $book = new Book();
             $book->setFromSchema($schema, $borrower);
             $em->persist($book);
@@ -56,7 +59,10 @@ class BookController extends AbstractController
         } else if ($schema && $schema->id !== null) {
             /** @var MemberRepository $mrep */
             $mrep = $em->getRepository(Member::class);
-            $borrower = $mrep->findOneBy(array('id' => $schema->id));
+            $borrower = null;
+            if ($schema->borrowed_by) {
+                $borrower = $mrep->findOneBy(array('id' => $schema->borrowed_by));
+            }
             /** @var BookRepository $rep */
             $rep = $this->getDoctrine()->getRepository(Book::class);
 

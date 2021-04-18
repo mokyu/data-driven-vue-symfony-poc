@@ -6,7 +6,6 @@ namespace App\Schema;
 use App\Annotation\Table;
 use App\Annotation\Form;
 use App\Annotation\Common;
-use App\Entity\Book;
 use App\Entity\Member;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,7 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
  *     tableTitle="Ledenlijst",
  *     formTitle="Lid aanmaken/bewerken",
  *     list="/api/members",
- *     post="/api/members"
+ *     post="/api/members",
+ *     delete="/api/members"
  * )
  */
 class MemberSchema

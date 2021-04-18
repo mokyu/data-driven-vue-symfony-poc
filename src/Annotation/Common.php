@@ -13,6 +13,7 @@ class Common implements \JsonSerializable
     public $formTitle;  // post url
     public $list;       // list endpoint
     public $post;       // post endpoint
+    public $delete;     // delete endpoint
     public $listKey;    // key used for showing schema in list
     public $listValue;  // value used for schema value
 
@@ -23,6 +24,7 @@ class Common implements \JsonSerializable
             'formTitle'     => $this->formTitle ?? 'No form title given',
             'list'          => $this->list,
             'post'          => $this->post,
+            'delete'        => $this->delete,
             'listKey'       => $this->listKey,
             'listValue'     => $this->listValue
         ];

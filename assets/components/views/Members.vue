@@ -1,9 +1,9 @@
 <template>
   <div>
-      <data-driven-data-table
-          schema="BookSchema"
-          :search="search"
-      />
+    <data-driven-data-table
+        schema="MemberSchema"
+        :search="search"
+    />
   </div>
 </template>
 
@@ -11,7 +11,7 @@
 import DataDrivenDataTable from "../common/DataDrivenDataTable";
 
 export default {
-  name: "Dashboard",
+  name: "Members",
   components: {DataDrivenDataTable},
 
   data() {

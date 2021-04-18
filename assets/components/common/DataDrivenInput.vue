@@ -44,7 +44,7 @@
       />
     </template>
     <template v-else-if="formInputData.fieldType === 'DateField'">
-      <v-menu offset-y>
+      <v-menu offset-y :close-on-content-click="false">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
               color="primary"

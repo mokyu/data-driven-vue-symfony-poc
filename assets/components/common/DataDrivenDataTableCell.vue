@@ -13,11 +13,11 @@
     <span v-else-if="type === 'DemolitionDateHeader'">
       {{ dateText || '-' }}
     </span>
-    <span v-else-if="type === 'CropExpirationHeader'">
-      {{ dateText || '-' }}
+    <span v-else-if="type === 'EnumField'">
+      {{ listValue || '-' }}
     </span>
-    <span v-else-if="type === 'FutureDateCountDown'">
-      {{ dateText || '-' }}
+    <span v-else-if="type === 'Memberfield'">
+      {{ value ? value.name : '-' }}
     </span>
     <span v-else>
       {{ value }}
@@ -54,32 +54,8 @@ export default {
 
   computed: {
     listValue() {
-      const result = this.listItems.find(item => item[this.header.listKey || 'key'] === this.value);
+      const result = this.listItems.find(item => item.key === this.value);
       return result[this.header.listValue || 'value'] || '-';
-    }
-  },
-
-  watch: {
-    value() {
-      this.refreshDates();
-    }
-  },
-
-  mounted() {
-    this.refreshDates();
-  },
-
-  methods: {
-    refreshDates() {
-      if (this.type === 'DemolitionDateHeader' && this.value !== null) {
-        this.dateText = moment.duration(moment(this.value).add(45, 'days').diff(moment())).humanize(true, {d: 99});
-      } else if (this.type === 'CropExpirationHeader' && this.value !== null) {
-        this.dateText = moment.duration(moment(this.value).add(24, 'hours').diff(moment())).humanize(true, {h: 999});
-      } else if (this.type === 'FutureDateCountDown' && this.value !== null) {
-        this.dateText = moment.duration(moment(this.value).diff(moment())).humanize(true, {h: 999});
-      } else {
-        this.dateText = null;
-      }
     }
   }
 }

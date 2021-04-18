@@ -26,10 +26,10 @@
         >
           <template v-slot:item="{ item }">
             <tr>
-              <td v-for="(header, key) in classData.header" :key="key">
+              <td v-for="(header, key) in classData.table" :key="key">
                 <data-driven-data-table-cell
-                    :type="header.type" :value="item[header.path]"
-                    :list-items="lists[header.listFromEnum || header.listFromSchema] || []"
+                    :type="header.fieldType" :value="item[header.path]"
+                    :list-items="lists[header.dataSource] || []"
                     :header="header"
                 />
               </td>
@@ -137,13 +137,13 @@ name: "DataDrivenDataTable",
   computed: {
     generatedHeaders() {
       let data = [];
-      if (this.classData && this.classData.header) {
-        this.classData.header.forEach(header => {
+      if (this.classData && this.classData.table) {
+        this.classData.table.forEach(header => {
           data.push(
               {
                 text: header.name,
                 value: header.path,
-                _cellType: header.type
+                _cellType: header.fieldType
               }
           )
         });
@@ -170,11 +170,11 @@ name: "DataDrivenDataTable",
     this.items = (await axios.get(this.classData.common.list, this.config)).data;
     // scan for list based headers and retrieve the lists
     for (const header of this.classData.table) {
-      if (header.type === 'List' && !this.lists[header.listFromEnum || header.listFromSchema]) {
-        if (header.listFromEnum) {
-          this.$set(this.lists, header.listFromEnum, (await axios.get(`/api/enum/${header.listFromEnum}/list`)).data);
+      if (header.dataSource && !this.lists[header.dataSource || header.dataSource]) {
+        if (header.dataSource) {
+          this.$set(this.lists, header.dataSource, (await axios.get(header.dataSource)).data);
         } else {
-          this.$set(this.lists, header.listFromSchema, (await axios.get(`/api/data/${header.listFromSchema}/list`)).data);
+          this.$set(this.lists, header.dataSource, (await axios.get(header.dataSource)).data);
         }
       }
       if (header.sort) {
@@ -190,7 +190,7 @@ name: "DataDrivenDataTable",
       if (await this.$confirm(this.deleteMessage, { color: "warning", title: "Warning" })) {
         this.isDeleting = true;
         try {
-          await axios.post(`/api/data/${this.schema}/delete`, element, this.config);
+          await axios.delete(this.classData.common.delete, {data: element, ...this.params});
         } catch(e) {
           this.bar = true;
           this.barText = 'Something went wrong while deleting.';
@@ -206,7 +206,7 @@ name: "DataDrivenDataTable",
 
     async reloadData() {
       this.isLoading = true;
-      this.items = (await axios.get(`/api/data/${this.schema}/list`, this.config)).data;
+      this.items = (await axios.get(this.classData.common.list, this.config)).data;
       this.isLoading = false;
     },
 

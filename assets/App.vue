@@ -7,8 +7,15 @@
         tile
     >
       <v-toolbar dense>
-        <v-app-bar-nav-icon/>
         <v-toolbar-title>De Boekenclub</v-toolbar-title>
+        <v-spacer/>
+        <v-btn icon>
+          <v-icon @click="$router.push('/')">mdi-bookshelf</v-icon>
+        </v-btn>
+
+        <v-btn icon>
+          <v-icon @click="$router.push('/members')">mdi-account-multiple</v-icon>
+        </v-btn>
       </v-toolbar>
       <v-card-text>
         <v-container>

@@ -14,7 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
  *     tableTitle="Boekenlijst",
  *     formTitle="Boek aanmaken/bewerken",
  *     list="/api/books",
- *     post="/api/books"
+ *     post="/api/books",
+ *     delete="/api/books"
  * )
  */
 class BookSchema
@@ -106,7 +107,8 @@ class BookSchema
      *     name="Genre",
      *     path="genre",
      *     fieldType="EnumField",
-     *     enumName="GenreEnum"
+     *     enumName="GenreEnum",
+     *     dataSource="/api/enum/GenreEnum"
      * )
      * @Form(
      *     rules={"REQUIRED"},

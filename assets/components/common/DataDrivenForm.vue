@@ -6,7 +6,7 @@
     >
       <v-card v-if="schema && showDialog">
         <v-card-title>
-          {{ classData.common.title }}
+          {{ classData.common.formTitle }}
           <v-spacer/>
           <v-icon
               @click="showDialog = false"

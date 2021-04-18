@@ -13,6 +13,7 @@ class Table implements \JsonSerializable
     public $fieldType;
     public $path;
     public $enumName;
+    public $dataSource;
 
     public function jsonSerialize(): array
     {
@@ -20,7 +21,8 @@ class Table implements \JsonSerializable
             'name' => $this->name,
             'fieldType' => $this->fieldType,
             'path' => $this->path,
-            'enumName' => $this->enumName
+            'enumName' => $this->enumName,
+            'dataSource' => $this->dataSource
         ];
     }
 }

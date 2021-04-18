@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MemberRepository;
+use App\Schema\MemberSchema;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -78,6 +79,13 @@ class Member
             }
         }
 
+        return $this;
+    }
+
+
+    public function setFromSchema(MemberSchema $schema): self
+    {
+        $this->name = $schema->name;
         return $this;
     }
 }

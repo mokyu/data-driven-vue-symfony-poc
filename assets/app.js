@@ -15,9 +15,11 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 import Dashboard from "./components/views/Dashboard";
+import Members from "./components/views/Members";
 
 const routes = [
     { path: '/', component: Dashboard},
+    {path: '/members', component: Members}
 ]
 
 const router = new VueRouter({

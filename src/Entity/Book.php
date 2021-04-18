@@ -50,6 +50,7 @@ class Book
 
     /**
      * @ORM\ManyToOne(targetEntity=Member::class, inversedBy="borrowed_books")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $borrowed_by;
 
